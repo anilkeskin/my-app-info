@@ -1,0 +1,60 @@
+﻿@page "/addnewdebt"
+@inject IDebtService objDebtService
+@inject NavigationManager NavigationManager
+<h2>Yeni Aidat Ekle</h2>
+<hr />
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Ad" class="control-label">Aidat İsmi</label>
+                <input form="Ad" class="form-control" @bind="objDebt.DebtName" />
+            </div>
+            <div class="form-group">
+                <label for="Total" class="control-label">Tutar</label>
+                <input form="Total" class="form-control" @bind="objDebt.Total" />
+            </div>
+            
+            <div class="form-group">
+                <label for="FlatNumber" class="control-label">Daire Numarası</label>
+                <select class="form-control" @bind="objDebt.FlatNumber">
+                    <option value="">-- Daire Numarası Seç --</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateDebt" value="Kaydet" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="İptal Et" />
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@code {
+    Debt objDebt = new Debt();
+
+    protected void CreateDebt()
+    {
+        objDebtService.Create(objDebt);
+        NavigationManager.NavigateTo("debts");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("debts");
+    }
+}

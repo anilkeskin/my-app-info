@@ -1,0 +1,88 @@
+﻿@page "/addnewuser"
+@inject IUserService objUserService
+@inject NavigationManager NavigationManager
+<h2>Yeni Kullanıcı Ekle</h2>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="TC" class="control-label">TC</label>
+                <input form="TC" class="form-control" @bind="objUser.TC" />
+            </div>
+            <div class="form-group">
+                <label for="FirstName" class="control-label">İsim</label>
+                <input form="FirstName" class="form-control" @bind="objUser.FirstName" />
+            </div>
+            <div class="form-group">
+                <label for="LastName" class="control-label">Soyisim</label>
+                <input form="LastName" class="form-control" @bind="objUser.LastName" />
+            </div>
+            <div class="form-group">
+                <label for="Phone" class="control-label">Telefon</label>
+                <input form="Phone" class="form-control" @bind="objUser.Phone" />
+            </div>
+            <div class="form-group">
+                <label for="BoodType" class="control-label">Kan Grubu</label>
+                <select class="form-control" @bind="objUser.BoodType">
+                    <option value="">-- Kan Grubu Seç --</option>
+                    <option value="Bilinmiyor">Bilinmiyor</option>
+                    <option value="0 Rh(+)">0 Rh(+)</option>
+                    <option value="0 Rh(-)">0 Rh(-)</option>
+                    <option value="AB Rh(+)">AB Rh(+)</option>
+                    <option value="AB Rh(-)">AB Rh(-)</option>
+                    <option value="A Rh(+)">A Rh(+)</option>
+                    <option value="A Rh(-)">A Rh(-)</option>
+                    <option value="B Rh(+)">B Rh(+)</option>
+                    <option value="B Rh(-)">B Rh(-)</option>
+                   
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Password" class="control-label">Şifre</label>
+                <input form="Password" class="form-control" @bind="objUser.Password" />
+            </div>
+            <div class="form-group">
+                <label for="FlatNumber" class="control-label">Daire Numarası</label>
+                <select class="form-control" @bind="objUser.FlatNumber">
+                    <option value="">-- Daire Numarası Seç --</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+                
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateUser" value="Kaydet" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="İptal Et" />
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@code {
+    User objUser = new User();
+
+    protected void CreateUser()
+    {
+        objUserService.Create(objUser);
+        NavigationManager.NavigateTo("Users");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Users");
+    }
+}

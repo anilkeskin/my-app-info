@@ -1,0 +1,49 @@
+﻿@page "/myflats"
+@inject IFlatService objFlatService
+@inject NavigationManager NavigationManager
+<h3>Daireler</h3>
+<NavLink class="nav-link" href="#">
+    <span class="oi oi-plus" aria-hidden="true"></span>Yeni Daire Ekle
+</NavLink>
+@if (objFlat == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Daire Numarası</th>
+                <th>Kat</th>
+                <th>Oda Sayısı</th>
+                <th>Aksiyon</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var flt in objFlat)
+            {
+                <tr>
+                    <td>@flt.FlatNumber</td>
+                    <td>@flt.Floor</td>
+                    <td>@flt.NoRooms</td>
+                    <td>
+                        <a class="nav-link" href="#">
+                            <span class="oi oi-pencil" aria-hidden="true"></span>Edit
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    List<Flats> objFlat;
+    protected override async Task OnInitializedAsync()
+    {
+        objFlat = await Task.Run(() => objFlatService.GetFlats());
+    }
+
+}

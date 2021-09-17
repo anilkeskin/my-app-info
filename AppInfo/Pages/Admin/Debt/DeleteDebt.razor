@@ -1,0 +1,39 @@
+﻿@page "/DeleteDebt/{CurrentID}"
+@inject IDebtService objDebtService
+@inject NavigationManager NavigationManager
+<h5>@objDebt.FlatNumber numaralı dairenin @objDebt.DebtName isimli aidat borcunu silme üzeresiniz. Bu işlemi yapmak istediğinize emin miziniz ?</h5>
+<hr />
+<form>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@DeleteMyDebt" value="Sil" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="İptal Et" />
+            </div>
+
+        </div>
+    </div>
+</form>
+
+
+@code {
+    [Parameter]
+    public String CurrentID { get; set; }
+
+    Debt objDebt = new Debt();
+    protected void DeleteMyDebt()
+    {
+        objDebtService.DeleteDebt(objDebt);
+        NavigationManager.NavigateTo("Debts");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Debts");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        objDebt = await Task.Run(() => objDebtService.GetDebtById(Guid.Parse(CurrentID)));
+    }
+}

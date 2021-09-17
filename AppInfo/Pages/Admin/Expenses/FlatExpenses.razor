@@ -1,0 +1,78 @@
+﻿@page "/expenses"
+@inject IExpenseService objExpenseService
+@inject NavigationManager NavigationManager
+<h2>Giderler</h2>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Title" class="control-label">Gider Adı</label>
+                <input form="Title" class="form-control" @bind="objExp.ExName" />
+            </div>
+            <div class="form-group">
+                <label for="Total" class="control-label">Tutar</label>
+                <input form="Total" class="form-control" @bind="objExp.Total" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateExpense" value="Ekle" />
+            </div>
+
+        </div>
+    </div>
+</form>
+<h3>Son Eklenen Giderler</h3>
+@if (objExpense == null)
+{
+    <p><em>Yükleniyor...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Gider Adı</th>
+                <th>Tutar</th>
+                <th>Tarih</th>
+                <th>Aksiyon</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var expe in objExpense)
+            {
+                <tr>
+                    <td>@expe.ExName</td>
+                    <td>@expe.Total</td>
+                    <td>@expe.ExDate</td>
+                    <td>
+                        <a class="nav-link" href="#">
+                            <span class="oi oi-pencil" aria-hidden="true"></span>Güncelle
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    Expenses objExp = new Expenses();
+
+    protected void CreateExpense()
+    {
+        DateTime now = DateTime.Now;
+        objExp.ExDate = now;
+        objExp.UserId = Guid.Parse("7020fb1c-f9e4-4de4-b14a-e0ebe8214099");
+        objExpenseService.Create(objExp);
+        NavigationManager.NavigateTo("expenses");
+    }
+    List<Expenses> objExpense;
+    protected override async Task OnInitializedAsync()
+    {
+        objExpense = await Task.Run(() => objExpenseService.GetExpenses());
+    }
+}

@@ -1,0 +1,53 @@
+﻿@page "/debts"
+@inject IDebtService objDebtService
+@inject NavigationManager NavigationManager
+<h3>Aidatlar</h3>
+<NavLink class="nav-link" href="addnewdebt">
+    <span class="oi oi-plus" aria-hidden="true"></span>Yeni Aidat Ekle
+</NavLink>
+@if (objDebt == null)
+{
+    <p><em>Yükleniyor...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Aidat Adı</th>
+                <th>Tutar</th>
+                <th>Daire</th>
+                <th>Aksiyon</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dbt in objDebt)
+            {
+                <tr>
+                    <td>@dbt.DebtName</td>
+                    <td>@dbt.Total</td>
+                    <td>@dbt.FlatNumber</td>
+
+                    <td>
+                        <a class="nav-link" href="editdebt/@dbt.Id">
+                            <span class="oi oi-pencil" aria-hidden="true"></span>Güncelle
+                        </a>
+                        <a class="nav-link" href="DeleteDebt/@dbt.Id">
+                            <span class="oi oi-trash" aria-hidden="true"></span>Sil
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    List<Debt> objDebt;
+    protected override async Task OnInitializedAsync()
+    {
+        objDebt = await Task.Run(() => objDebtService.GetDebts());
+    }
+
+}

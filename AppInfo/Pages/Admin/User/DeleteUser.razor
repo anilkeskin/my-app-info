@@ -1,0 +1,41 @@
+﻿@page "/DeleteUser/{CurrentID}"
+@inject IUserService objUserService
+@inject NavigationManager NavigationManager
+<h2>Kullanıcı Siliniyor</h2>
+<hr />
+
+<h3>@objUser.FirstName İsimli kullanıcıyı silmek istediğinize emin misiniz ?</h3>
+<form>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@DeleteMyUser" value="Sil" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="İptal Et" />
+            </div>
+
+        </div>
+    </div>
+</form>
+
+
+@code {
+    [Parameter]
+    public String CurrentID { get; set; }
+
+    User objUser = new User();
+    protected void DeleteMyUser()
+    {
+        objUserService.DeleteUser(objUser);
+        NavigationManager.NavigateTo("Users");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Users");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        objUser = await Task.Run(() => objUserService.GetUserById(Guid.Parse(CurrentID)));
+    }
+}
